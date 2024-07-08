@@ -7,6 +7,32 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestIsLetter(t *testing.T) {
+	assert.True(t, isLetter('a'), "'a' should be true")
+	assert.True(t, isLetter('h'), "'h' should be true")
+	assert.True(t, isLetter('z'), "'z' should be true")
+	assert.True(t, isLetter('A'), "'A' should be true")
+	assert.True(t, isLetter('H'), "'H' should be true")
+	assert.True(t, isLetter('Z'), "'Z' should be true")
+
+	assert.False(t, isLetter('1'), "'1' should be false")
+	assert.False(t, isLetter('.'), "'.' should be false")
+	assert.False(t, isLetter('/'), "'/' should be false")
+	assert.False(t, isLetter('&'), "'&' should be false")
+	assert.False(t, isLetter('~'), "'1' should be false")
+	assert.False(t, isLetter(0), "null should be false")
+}
+
+func TestIsDigit(t *testing.T) {
+	assert.True(t, isDigit('0'), "'0' should be true")
+	assert.True(t, isDigit('5'), "'5' should be true")
+	assert.True(t, isDigit('9'), "'9' should be true")
+
+	assert.False(t, isDigit('a'), "'a' should be false")
+	assert.False(t, isDigit('/'), "'/' should be false")
+	assert.False(t, isDigit('-'), "'-' should be false")
+}
+
 func TestNextToken(t *testing.T) {
 	input := `let five = 5;
 let ten = 10;
