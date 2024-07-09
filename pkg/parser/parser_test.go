@@ -5,7 +5,7 @@ import (
 
 	"github.com/estevesnp/dsb/pkg/ast"
 	"github.com/estevesnp/dsb/pkg/lexer"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestLetStatements(t *testing.T) {
@@ -19,8 +19,8 @@ let foo = 42;
 
 	program := p.ParseProgram()
 
-	assert.NotNil(t, program)
-	assert.Equal(t, 3, len(program.Statements))
+	require.NotNil(t, program)
+	require.Equal(t, 3, len(program.Statements))
 
 	tests := []struct {
 		expectedIdent string
@@ -32,34 +32,12 @@ let foo = 42;
 
 	for i, tt := range tests {
 		stmt := program.Statements[i]
+		require.Equal(t, "let", stmt.TokenLiteral())
 
-		if !testLetStatement(t, stmt, tt.expectedIdent) {
-			return
-		}
+		letStmt, ok := stmt.(*ast.LetStatement)
+		require.True(t, ok)
+
+		require.Equal(t, tt.expectedIdent, letStmt.Name.Value)
+		require.Equal(t, tt.expectedIdent, letStmt.Name.TokenLiteral())
 	}
-}
-
-func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
-	if s.TokenLiteral() != "let" {
-		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
-		return false
-	}
-
-	letStmt, ok := s.(*ast.LetStatement)
-	if !ok {
-		t.Errorf("s not *ast.LetStatement. got=%T", s)
-		return false
-	}
-
-	if letStmt.Name.Value != name {
-		t.Errorf("letStmt.Name.Value not '%s'. got=%s", name, letStmt.Name.Value)
-		return false
-	}
-
-	if letStmt.Name.TokenLiteral() != name {
-		t.Errorf("letStmt.Name.TokenLiteral() not '%s'. got=%s", name, letStmt.Name.TokenLiteral())
-		return false
-	}
-
-	return true
 }
