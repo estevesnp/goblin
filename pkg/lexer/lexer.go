@@ -1,6 +1,10 @@
 package lexer
 
-import "github.com/estevesnp/dsb/pkg/token"
+import (
+	"fmt"
+
+	"github.com/estevesnp/dsb/pkg/token"
+)
 
 type Lexer struct {
 	input        string
@@ -32,14 +36,28 @@ func (l *Lexer) NextToken() token.Token {
 	l.skipWhitespace()
 
 	switch l.ch {
-	case '=':
-		tok = newToken(token.ASSIGN, l.ch)
 	case '+':
 		tok = newToken(token.PLUS, l.ch)
 	case '-':
 		tok = newToken(token.MINUS, l.ch)
+	case '=':
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok.Type = token.EQ
+			tok.Literal = fmt.Sprintf("%c%c", ch, l.ch)
+		} else {
+			tok = newToken(token.ASSIGN, l.ch)
+		}
 	case '!':
-		tok = newToken(token.BANG, l.ch)
+		if l.peekChar() == '=' {
+			ch := l.ch
+			l.readChar()
+			tok.Type = token.NOT_EQ
+			tok.Literal = fmt.Sprintf("%c%c", ch, l.ch)
+		} else {
+			tok = newToken(token.BANG, l.ch)
+		}
 	case '*':
 		tok = newToken(token.ASTERISK, l.ch)
 	case '/':
@@ -80,6 +98,14 @@ func (l *Lexer) NextToken() token.Token {
 	l.readChar()
 
 	return tok
+}
+
+func (l *Lexer) peekChar() byte {
+	if l.readPosition >= len(l.input) {
+		return 0
+	}
+
+	return l.input[l.readPosition]
 }
 
 func (l *Lexer) readIdentifier() string {
