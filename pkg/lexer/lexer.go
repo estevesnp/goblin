@@ -1,6 +1,6 @@
 package lexer
 
-import "github.com/estevesnp/goblin/pkg/token"
+import "github.com/estevesnp/dsb/pkg/token"
 
 type Lexer struct {
 	input        string

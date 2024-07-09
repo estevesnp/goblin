@@ -3,7 +3,7 @@ package lexer
 import (
 	"testing"
 
-	"github.com/estevesnp/goblin/pkg/token"
+	"github.com/estevesnp/dsb/pkg/token"
 	"github.com/stretchr/testify/assert"
 )
 

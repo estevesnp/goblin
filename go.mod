@@ -1,4 +1,4 @@
-module github.com/estevesnp/goblin
+module github.com/estevesnp/dsb
 
 go 1.22.4
 
